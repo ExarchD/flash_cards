@@ -1,2 +1,6 @@
 Complicate -- To make not simple -- 5
-Simple -- To make un-complicated -- 5
+Simplify -- To make un-complicated -- 5
+Beautify -- To make more appealing -- 5
+Uglify -- To make less appealing -- 5
+Pull -- To bring towards -- 5
+Push -- To push away -- 5
