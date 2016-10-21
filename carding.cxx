@@ -18,7 +18,9 @@ int main ()
             string word = line.substr(0, line.find(delimiter));
             line.erase(0, line.find(delimiter) + delimiter.length());
             string def = line.substr(0, line.find(delimiter));
-            word_obj newword = {word, def};
+            line.erase(0, line.find(delimiter) + delimiter.length());
+            int number = std::stoi(line.substr(0, line.find(delimiter)));
+            word_obj newword = {word, def, number};
             nouns.push_back(newword);
         }
         nounfile.close();
