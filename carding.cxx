@@ -92,57 +92,15 @@ int main ()
 
         vector<string> responses;
         responses.push_back(answer.def);
-        if ( isType == 1 )
-        {
-            int choices = 3;
-            if ( verbs_glob.size() < 4 )
-            {
-                choices = verbs_glob.size()-1;
-            }
-
-            /* cout << "Is a verb" << endl; */
-            int z=0;
-            while ( z < choices)
-            {
-                int randm_response=rand() % verbs_glob.size();
-                if(std::find(responses.begin(), responses.end(), verbs_glob[randm_response].def) != responses.end()) 
-                {
-                } else {
-                    responses.push_back(verbs_glob[randm_response].def);
-                    z++;
-                }
-            }
-        }
-
-        if ( isType == 2 )
-        {
-            int choices = 3;
-            if ( nouns_glob.size() < 4 )
-            {
-                choices = nouns_glob.size()-1;
-            }
-            /* cout << "Is a noun" << endl; */
-
-            int z=0;
-            while ( z < choices)
-            {
-                int randm_response=rand() % nouns_glob.size();
-                if(std::find(responses.begin(), responses.end(), nouns_glob[randm_response].def) != responses.end()) 
-                {
-                } else {
-                    responses.push_back(nouns_glob[randm_response].def);
-                    z++;
-                }
-            }
-        }
+        if ( isType == 1 ) get_answers(verbs_glob, responses);
+        if ( isType == 2 ) get_answers(nouns_glob, responses);
 
         cout << endl;
         std::sort(responses.begin(), responses.end());
-        for ( int y=0; y < responses.size(); y++)
+        for ( unsigned int y=0; y < responses.size(); y++)
         {
             cout << y+1 << ") " << responses[y] << endl;
         }
-
 
         //need to sanitize input
         int user_answer=get_input();
@@ -189,7 +147,7 @@ void exit()
     myfile.open ("test.txt");
     for (int x=0; x< nouns_glob.size(); x++)
     {
-        myfile << nouns_glob[x].word << "  --  " << nouns_glob[x].def << "  --  " << nouns_glob[x].number << "\n";
+        myfile << nouns_glob[x].word << " -- " << nouns_glob[x].def << " -- " << nouns_glob[x].number << "\n";
     }
     myfile.close();
     exit (EXIT_SUCCESS);
@@ -227,4 +185,26 @@ int get_input ()
         }
     }
     return x;
+}
+
+void get_answers(vector<word_obj> container, vector<string>& responses)
+{
+    int choices = 3;
+    if ( container.size() < 4 )
+    {
+        choices = container.size()-1;
+    }
+
+    /* cout << "Is a verb" << endl; */
+    int z=0;
+    while ( z < choices)
+    {
+        int randm_response=rand() % container.size();
+        if(std::find(responses.begin(), responses.end(), container[randm_response].def) != responses.end()) 
+        {
+        } else {
+            responses.push_back(container[randm_response].def);
+            z++;
+        }
+    }
 }

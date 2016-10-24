@@ -11,6 +11,7 @@ std::vector<word_obj> nouns_glob;
 std::vector<word_obj> verbs_glob;
 void exit();
 int get_input();
+void get_answers(std::vector<word_obj> container, std::vector<std::string> &responses);
 void iterate_number(std::vector<word_obj> &container, std::string, bool);
 struct find_word : std::unary_function<word_obj, bool> {
     std::string word;
