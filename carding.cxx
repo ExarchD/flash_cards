@@ -4,6 +4,8 @@
 #include <fstream>
 #include "carding.h"
 using namespace std;
+
+
 int main () 
 {
     ifstream nounfile ("nouns.txt");
@@ -142,10 +144,8 @@ int main ()
         }
 
 
-        int user_answer;
         //need to sanitize input
-        cin >> user_answer;
-        //sanitize(user_answer)
+        int user_answer=get_input();
 
         if ( responses[user_answer-1] == answer.def )
         {
@@ -164,6 +164,7 @@ int main ()
         }
         else
         {
+            total=total-answer.number;
             cout << "WRONG!" << endl;
             if ( isType == 2 )
             {
@@ -190,13 +191,40 @@ void exit()
     {
         myfile << nouns_glob[x].word << "  --  " << nouns_glob[x].def << "  --  " << nouns_glob[x].number << "\n";
     }
+    myfile.close();
+    exit (EXIT_SUCCESS);
 }
 
-void iterate_number(vector<word_obj> container, std::string correct_word, bool down)
+void iterate_number(vector<word_obj>& container, std::string correct_word, bool down)
 {
-                vector<word_obj>::iterator it;
-                it = std::find_if(container.begin(), container.end(), find_word(correct_word));
-                auto pos = std::distance(container.begin(), it);
-                if (down) container[pos].number=container[pos].number-1;
-                else container[pos].number=container[pos].number+1;
+    vector<word_obj>::iterator it;
+    it = std::find_if(container.begin(), container.end(), find_word(correct_word));
+    auto pos = std::distance(container.begin(), it);
+    cout << container[pos].word << endl;
+    if (down) container[pos].number=container[pos].number-1;
+    else container[pos].number=container[pos].number+1;
+}
+
+int get_input ()
+{
+    int x=999;
+    std::string s;
+    while(x==999)
+    {
+        if ( cin >> s ) 
+        {
+            if ( s == "q" || s == "Q" || s == "QUIT" || s == "quit" ) exit();
+            try 
+            {
+                x=stoi(s);
+            }
+            catch (const std::invalid_argument& ia) 
+            {
+                std::cerr << "Invalid argument, insert a number or q/Q \n";
+            }
+            std::cin.clear();
+            std::cin.ignore(256,'\n');
+        }
+    }
+    return x;
 }

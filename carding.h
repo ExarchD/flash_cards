@@ -10,7 +10,8 @@ struct word_obj
 std::vector<word_obj> nouns_glob;
 std::vector<word_obj> verbs_glob;
 void exit();
-void iterate_number(std::vector<word_obj>, std::string, bool);
+int get_input();
+void iterate_number(std::vector<word_obj> &container, std::string, bool);
 struct find_word : std::unary_function<word_obj, bool> {
     std::string word;
     find_word(std::string word):word(word) { }
