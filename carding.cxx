@@ -45,8 +45,8 @@ int main ()
         }
         verbfile.close();
     }
-    vector<word_obj> nouns2=nouns;
-    vector<word_obj> verbs2=verbs;
+    nouns_glob=nouns;
+    verbs_glob=verbs;
 
     srand (time(NULL));
     while ( total > 0 )
@@ -93,20 +93,20 @@ int main ()
         if ( isType == 1 )
         {
             int choices = 3;
-            if ( verbs2.size() < 4 )
+            if ( verbs_glob.size() < 4 )
             {
-                choices = verbs2.size()-1;
+                choices = verbs_glob.size()-1;
             }
 
             /* cout << "Is a verb" << endl; */
             int z=0;
             while ( z < choices)
             {
-                int randm_response=rand() % verbs2.size();
-                if(std::find(responses.begin(), responses.end(), verbs2[randm_response].def) != responses.end()) 
+                int randm_response=rand() % verbs_glob.size();
+                if(std::find(responses.begin(), responses.end(), verbs_glob[randm_response].def) != responses.end()) 
                 {
                 } else {
-                    responses.push_back(verbs2[randm_response].def);
+                    responses.push_back(verbs_glob[randm_response].def);
                     z++;
                 }
             }
@@ -115,20 +115,20 @@ int main ()
         if ( isType == 2 )
         {
             int choices = 3;
-            if ( nouns2.size() < 4 )
+            if ( nouns_glob.size() < 4 )
             {
-                choices = nouns2.size()-1;
+                choices = nouns_glob.size()-1;
             }
             /* cout << "Is a noun" << endl; */
 
             int z=0;
             while ( z < choices)
             {
-                int randm_response=rand() % nouns2.size();
-                if(std::find(responses.begin(), responses.end(), nouns2[randm_response].def) != responses.end()) 
+                int randm_response=rand() % nouns_glob.size();
+                if(std::find(responses.begin(), responses.end(), nouns_glob[randm_response].def) != responses.end()) 
                 {
                 } else {
-                    responses.push_back(nouns2[randm_response].def);
+                    responses.push_back(nouns_glob[randm_response].def);
                     z++;
                 }
             }
@@ -145,6 +145,7 @@ int main ()
         int user_answer;
         //need to sanitize input
         cin >> user_answer;
+        //sanitize(user_answer)
 
         if ( responses[user_answer-1] == answer.def )
         {
@@ -152,17 +153,50 @@ int main ()
             cout << "CORRECT!" << endl;
             if ( isType == 2 )
             {
-                cout << nouns[index_val].word << endl;
                 nouns.erase(nouns.begin() + index_val);
+                iterate_number(nouns_glob,answer.word,true);
             }
             else
             {
-                cout << verbs[index_val].word << endl;
                 verbs.erase(verbs.begin() + index_val);
+                iterate_number(verbs_glob,answer.word,true);
+            }
+        }
+        else
+        {
+            cout << "WRONG!" << endl;
+            if ( isType == 2 )
+            {
+                nouns.erase(nouns.begin() + index_val);
+                iterate_number(nouns_glob,answer.word,false);
+            }
+            else
+            {
+                verbs.erase(verbs.begin() + index_val);
+                iterate_number(verbs_glob,answer.word,false);
             }
         }
         cout << endl;
 
     }
+    exit();
+}
 
+void exit() 
+{
+    ofstream myfile;
+    myfile.open ("test.txt");
+    for (int x=0; x< nouns_glob.size(); x++)
+    {
+        myfile << nouns_glob[x].word << "  --  " << nouns_glob[x].def << "  --  " << nouns_glob[x].number << "\n";
+    }
+}
+
+void iterate_number(vector<word_obj> container, std::string correct_word, bool down)
+{
+                vector<word_obj>::iterator it;
+                it = std::find_if(container.begin(), container.end(), find_word(correct_word));
+                auto pos = std::distance(container.begin(), it);
+                if (down) container[pos].number=container[pos].number-1;
+                else container[pos].number=container[pos].number+1;
 }

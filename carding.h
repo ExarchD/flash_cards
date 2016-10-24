@@ -1,8 +1,20 @@
 #include <string>
+#include <vector>
 
 struct word_obj
 {
     std::string word;
     std::string def;
     int number;
+};
+std::vector<word_obj> nouns_glob;
+std::vector<word_obj> verbs_glob;
+void exit();
+void iterate_number(std::vector<word_obj>, std::string, bool);
+struct find_word : std::unary_function<word_obj, bool> {
+    std::string word;
+    find_word(std::string word):word(word) { }
+    bool operator()(word_obj const& m) const {
+        return m.word == word;
+    }
 };
