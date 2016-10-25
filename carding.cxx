@@ -8,45 +8,11 @@ using namespace std;
 
 int main () 
 {
-    ifstream nounfile ("nouns.txt");
-    ifstream verbfile ("verbs.txt");
     vector<word_obj> nouns;
     vector<word_obj> verbs;
-    string line;
     int total=0;
-    if (nounfile.is_open())
-    {
-        while ( getline (nounfile,line) )
-        {
-            string delimiter = " -- ";
-            string word = line.substr(0, line.find(delimiter));
-            line.erase(0, line.find(delimiter) + delimiter.length());
-            string def = line.substr(0, line.find(delimiter));
-            line.erase(0, line.find(delimiter) + delimiter.length());
-            int number = stoi(line.substr(0, line.find(delimiter)));
-            total=total+number;
-            word_obj newword = {word, def, number};
-            nouns.push_back(newword);
-        }
-        nounfile.close();
-    }
-
-    if (verbfile.is_open())
-    {
-        while ( getline (verbfile,line) )
-        {
-            string delimiter = " -- ";
-            string word = line.substr(0, line.find(delimiter));
-            line.erase(0, line.find(delimiter) + delimiter.length());
-            string def = line.substr(0, line.find(delimiter));
-            line.erase(0, line.find(delimiter) + delimiter.length());
-            int number = stoi(line.substr(0, line.find(delimiter)));
-            total=total+number;
-            word_obj newword = {word, def, number};
-            verbs.push_back(newword);
-        }
-        verbfile.close();
-    }
+    read_files(nouns,"nouns",total);
+    read_files(verbs,"verbs",total);
     nouns_glob=nouns;
     verbs_glob=verbs;
 
@@ -145,6 +111,7 @@ void exit()
 {
     write_files(nouns_glob, "nouns");
     write_files(verbs_glob, "verbs");
+    write_files(completed, "memorized");
     exit (EXIT_SUCCESS);
 }
 
@@ -157,6 +124,36 @@ void write_files(vector<word_obj> container, string file)
         myfile << container[x].word << " -- " << container[x].def << " -- " << container[x].number << "\n";
     }
     myfile.close();
+}
+
+void read_files(vector<word_obj>& container, string filename, int& total)
+{
+    ifstream file (filename+".txt");
+    string line;
+    if (file.is_open())
+    {
+        while ( getline (file,line) )
+        {
+            string delimiter = " -- ";
+            string word = line.substr(0, line.find(delimiter));
+            line.erase(0, line.find(delimiter) + delimiter.length());
+            string def = line.substr(0, line.find(delimiter));
+            line.erase(0, line.find(delimiter) + delimiter.length());
+            int number = stoi(line.substr(0, line.find(delimiter)));
+
+            word_obj newword = {word, def, number};
+            if ( number != 0 )
+            {
+                total=total+number;
+                container.push_back(newword);
+            }
+            else
+            {
+                completed.push_back(newword);
+            }
+        }
+        file.close();
+    }
 }
 
 void iterate_number(vector<word_obj>& container, std::string correct_word, bool down)

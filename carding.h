@@ -9,11 +9,13 @@ struct word_obj
 };
 std::vector<word_obj> nouns_glob;
 std::vector<word_obj> verbs_glob;
+std::vector<word_obj> completed;
 void exit();
 int get_input();
 void get_answers(std::vector<word_obj> container, std::vector<std::string> &responses);
 void iterate_number(std::vector<word_obj> &container, std::string, bool);
 void write_files(std::vector<word_obj> container, std::string);
+void read_files(std::vector<word_obj> &container, std::string, int &total);
 struct find_word : std::unary_function<word_obj, bool> {
     std::string word;
     find_word(std::string word):word(word) { }

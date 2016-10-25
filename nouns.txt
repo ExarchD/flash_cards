@@ -1,2 +1,2 @@
-Complicated -- Not simple -- 4
-Simple -- Not complicated -- 4
+Complicated -- Not simple -- 2
+Simple -- Not complicated -- 2
