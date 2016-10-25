@@ -1,2 +1,2 @@
-Pull -- To bring towards -- 5
-Push -- To push away -- 5
+Pull -- To bring towards -- 4
+Push -- To push away -- 4

@@ -143,14 +143,20 @@ int main ()
 
 void exit() 
 {
+    write_files(nouns_glob, "nouns");
+    write_files(verbs_glob, "verbs");
+    exit (EXIT_SUCCESS);
+}
+
+void write_files(vector<word_obj> container, string file)
+{
     ofstream myfile;
-    myfile.open ("test.txt");
-    for (int x=0; x< nouns_glob.size(); x++)
+    myfile.open (file+".txt");
+    for (int x=0; x< container.size(); x++)
     {
-        myfile << nouns_glob[x].word << " -- " << nouns_glob[x].def << " -- " << nouns_glob[x].number << "\n";
+        myfile << container[x].word << " -- " << container[x].def << " -- " << container[x].number << "\n";
     }
     myfile.close();
-    exit (EXIT_SUCCESS);
 }
 
 void iterate_number(vector<word_obj>& container, std::string correct_word, bool down)
