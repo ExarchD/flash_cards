@@ -1,12 +1,12 @@
 #include <vector>
-#include <algorithm> 
+#include <algorithm>
 #include <iostream>
 #include <fstream>
 #include "carding.h"
 using namespace std;
 
 
-int main () 
+int main ()
 {
     vector<word_obj> nouns;
     vector<word_obj> verbs;
@@ -107,7 +107,7 @@ int main ()
     exit();
 }
 
-void exit() 
+void exit()
 {
     write_files(nouns_glob, "nouns");
     write_files(verbs_glob, "verbs");
@@ -172,14 +172,14 @@ int get_input ()
     std::string s;
     while(x==999)
     {
-        if ( cin >> s ) 
+        if ( cin >> s )
         {
             if ( s == "q" || s == "Q" || s == "QUIT" || s == "quit" ) exit();
-            try 
+            try
             {
                 x=stoi(s);
             }
-            catch (const std::invalid_argument& ia) 
+            catch (const std::invalid_argument& ia)
             {
                 std::cerr << "Invalid argument, insert a number or q/Q \n";
             }
@@ -198,12 +198,11 @@ void get_answers(vector<word_obj> container, vector<string>& responses)
         choices = container.size()-1;
     }
 
-    /* cout << "Is a verb" << endl; */
     int z=0;
     while ( z < choices)
     {
         int randm_response=rand() % container.size();
-        if(std::find(responses.begin(), responses.end(), container[randm_response].def) != responses.end()) 
+        if(std::find(responses.begin(), responses.end(), container[randm_response].def) != responses.end())
         {
         } else {
             responses.push_back(container[randm_response].def);
