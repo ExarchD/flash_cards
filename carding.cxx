@@ -6,18 +6,20 @@
 using namespace std;
 
 
-int flashes::card_main ()
+void flashes::card_init ()
 {
-    vector<word_obj> nouns;
-    vector<word_obj> verbs;
-    int total=0;
+    total=0;
     read_files(nouns,"nouns",total);
     read_files(verbs,"verbs",total);
     nouns_glob=nouns;
     verbs_glob=verbs;
-
     srand (time(NULL));
-    while ( total > 0 )
+}
+
+void flashes::get_next_flash(string& question, vector<string>& vect_resp)
+{
+    cout << nouns.size() << endl;
+    if ( total > 0 )
     {
         int random_word_index=rand() % total;
 
@@ -60,6 +62,8 @@ int flashes::card_main ()
         responses.push_back(answer.def);
         if ( isType == 1 ) get_answers(verbs_glob, responses);
         if ( isType == 2 ) get_answers(nouns_glob, responses);
+        question=answer.word;
+        vect_resp=responses;
 
         cout << endl;
         std::sort(responses.begin(), responses.end());
@@ -67,46 +71,51 @@ int flashes::card_main ()
         {
             cout << y+1 << ") " << responses[y] << endl;
         }
+    }
+    else return;
+}
 
         //need to sanitize input
-        int user_answer=get_input();
+/* void flashes::bullshit() */
+/* { */
+/*         int user_answer=get_input(); */
 
-        if ( responses[user_answer-1] == answer.def )
-        {
-            total=total-answer.number;
-            cout << "CORRECT!" << endl;
-            if ( isType == 2 )
-            {
-                nouns.erase(nouns.begin() + index_val);
-                iterate_number(nouns_glob,answer.word,true);
-            }
-            else
-            {
-                verbs.erase(verbs.begin() + index_val);
-                iterate_number(verbs_glob,answer.word,true);
-            }
-        }
-        else
-        {
-            total=total-answer.number;
-            cout << "WRONG!" << endl;
-            cout << "The answer is '" << answer.def << "'" <<  endl;
-            if ( isType == 2 )
-            {
-                nouns.erase(nouns.begin() + index_val);
-                iterate_number(nouns_glob,answer.word,false);
-            }
-            else
-            {
-                verbs.erase(verbs.begin() + index_val);
-                iterate_number(verbs_glob,answer.word,false);
-            }
-        }
-        cout << endl;
+/*         if ( responses[user_answer-1] == answer.def ) */
+/*         { */
+/*             total=total-answer.number; */
+/*             cout << "CORRECT!" << endl; */
+/*             if ( isType == 2 ) */
+/*             { */
+/*                 nouns.erase(nouns.begin() + index_val); */
+/*                 iterate_number(nouns_glob,answer.word,true); */
+/*             } */
+/*             else */
+/*             { */
+/*                 verbs.erase(verbs.begin() + index_val); */
+/*                 iterate_number(verbs_glob,answer.word,true); */
+/*             } */
+/*         } */
+/*         else */
+/*         { */
+/*             total=total-answer.number; */
+/*             cout << "WRONG!" << endl; */
+/*             cout << "The answer is '" << answer.def << "'" <<  endl; */
+/*             if ( isType == 2 ) */
+/*             { */
+/*                 nouns.erase(nouns.begin() + index_val); */
+/*                 iterate_number(nouns_glob,answer.word,false); */
+/*             } */
+/*             else */
+/*             { */
+/*                 verbs.erase(verbs.begin() + index_val); */
+/*                 iterate_number(verbs_glob,answer.word,false); */
+/*             } */
+/*         } */
+/*         cout << endl; */
 
-    }
-    exit_program();
-}
+/*     } */
+/*     exit_program(); */
+/* } */
 
 void flashes::exit_program()
 {
@@ -120,7 +129,7 @@ void flashes::write_files(vector<word_obj> container, string file)
 {
     ofstream myfile;
     myfile.open (file+".txt");
-    for (int x=0; x< container.size(); x++)
+    for (unsigned int x=0; x< container.size(); x++)
     {
         myfile << container[x].word << " -- " << container[x].def << " -- " << container[x].number << "\n";
     }

@@ -66,14 +66,19 @@
      <string>PushButton</string>
     </property>
    </widget>
-   <widget class="QLabel" name="word">
+   <widget class="QLabel" name="word_label">
     <property name="geometry">
      <rect>
       <x>20</x>
       <y>40</y>
-      <width>211</width>
-      <height>61</height>
+      <width>611</width>
+      <height>38</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>24</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>Word</string>

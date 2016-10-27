@@ -10,8 +10,9 @@ class flashes
             std::string def;
             int number;
         };
-        int card_main();
+        void card_init();
         void exit_program();
+        void get_next_flash(std::string &question, std::vector<std::string> &vect_resp);
         int get_input();
         void get_answers(std::vector<word_obj> container, std::vector<std::string> &responses);
         void iterate_number(std::vector<word_obj> &container, std::string, bool);
@@ -26,5 +27,8 @@ class flashes
         };
         std::vector<word_obj> nouns_glob;
         std::vector<word_obj> verbs_glob;
+        std::vector<word_obj> nouns;
+        std::vector<word_obj> verbs;
         std::vector<word_obj> completed;
+        int total;
 };
