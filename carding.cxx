@@ -90,6 +90,7 @@ int main ()
         {
             total=total-answer.number;
             cout << "WRONG!" << endl;
+            cout << "The answer is '" << answer.def << "'" <<  endl;
             if ( isType == 2 )
             {
                 nouns.erase(nouns.begin() + index_val);
@@ -130,6 +131,7 @@ void read_files(vector<word_obj>& container, string filename, int& total)
 {
     ifstream file (filename+".txt");
     string line;
+    /* check if file exists */
     if (file.is_open())
     {
         while ( getline (file,line) )
