@@ -6,7 +6,7 @@
 using namespace std;
 
 
-int main ()
+int flashes::card_main ()
 {
     vector<word_obj> nouns;
     vector<word_obj> verbs;
@@ -105,10 +105,10 @@ int main ()
         cout << endl;
 
     }
-    exit();
+    exit_program();
 }
 
-void exit()
+void flashes::exit_program()
 {
     if (nouns_glob.size() != 0 ) write_files(nouns_glob, "nouns");
     if (verbs_glob.size() != 0 ) write_files(verbs_glob, "verbs");
@@ -116,7 +116,7 @@ void exit()
     exit (EXIT_SUCCESS);
 }
 
-void write_files(vector<word_obj> container, string file)
+void flashes::write_files(vector<word_obj> container, string file)
 {
     ofstream myfile;
     myfile.open (file+".txt");
@@ -127,7 +127,7 @@ void write_files(vector<word_obj> container, string file)
     myfile.close();
 }
 
-void read_files(vector<word_obj>& container, string filename, int& total)
+void flashes::read_files(vector<word_obj>& container, string filename, int& total)
 {
     ifstream file (filename+".txt");
     string line;
@@ -158,7 +158,7 @@ void read_files(vector<word_obj>& container, string filename, int& total)
     }
 }
 
-void iterate_number(vector<word_obj>& container, std::string correct_word, bool down)
+void flashes::iterate_number(vector<word_obj>& container, std::string correct_word, bool down)
 {
     vector<word_obj>::iterator it;
     it = std::find_if(container.begin(), container.end(), find_word(correct_word));
@@ -168,7 +168,7 @@ void iterate_number(vector<word_obj>& container, std::string correct_word, bool 
     else container[pos].number=container[pos].number+1;
 }
 
-int get_input ()
+int flashes::get_input ()
 {
     int x=999;
     std::string s;
@@ -176,7 +176,7 @@ int get_input ()
     {
         if ( cin >> s )
         {
-            if ( s == "q" || s == "Q" || s == "QUIT" || s == "quit" ) exit();
+            if ( s == "q" || s == "Q" || s == "QUIT" || s == "quit" ) exit_program();
             try
             {
                 x=stoi(s);
@@ -192,7 +192,7 @@ int get_input ()
     return x;
 }
 
-void get_answers(vector<word_obj> container, vector<string>& responses)
+void flashes::get_answers(vector<word_obj> container, vector<string>& responses)
 {
     int choices = 3;
     if ( container.size() < 4 )
