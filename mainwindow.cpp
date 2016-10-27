@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <iostream>
+#include "mypopup.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -79,6 +80,18 @@ void MainWindow::on_skip_clicked()
     ThisCard.get_next_flash(question, responses);
 }
 
+
+/* popup::popup(QWidget *parent) : */
+/*     QDialog(parent), */
+/*     ui(new Ui::popup) */
+/* { */
+/*     ui->setupUi(this); */
+/* } */
+
+/* popup::~popup() */
+/* { */
+/*     delete ui; */
+/* } */
 void MainWindow::on_continue_2_clicked()
 {
     ThisCard.process_response(official_answer);
@@ -87,13 +100,14 @@ void MainWindow::on_continue_2_clicked()
     if ( responses.size() < 2 )
     {
         ThisCard.exit_program();
-        /* QMessageBox::information( */
-        /*         this, */
-        /*         tr("Flash Cards"), */
-        /*         tr("Out of words!") ); */
-        qApp->exit();
+        MyPopUp *Thispop= new MyPopUp(this);
+        Thispop->show();
+        connect(Thispop, SIGNAL(signal_launch()), this, SLOT(signal_recieved()));
     }
-    Set_values(question,responses);
+    else
+    {
+        Set_values(question,responses);
+    }
     QPalette palette_sample;
     ui->answer1->setPalette(ui->answer1->style()->standardPalette());
     ui->answer2->setPalette(ui->answer2->style()->standardPalette());
@@ -101,4 +115,12 @@ void MainWindow::on_continue_2_clicked()
     ui->answer4->setPalette(ui->answer4->style()->standardPalette());
     ui->skip->setEnabled(true);
     responded=false;
+}
+
+void MainWindow::signal_recieved()
+{
+    std::cout << "signal_recieved" << std::endl;
+    ThisCard.card_init();
+    ThisCard.get_next_flash(question, responses);
+    Set_values(question,responses);
 }

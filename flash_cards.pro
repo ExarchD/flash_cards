@@ -15,11 +15,11 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp\
         carding.cxx \
-    popup.cpp
+    mypopup.cpp
 
 HEADERS  += mainwindow.h\
             carding.h \
-    popup.h
+    mypopup.h
 
 FORMS    += mainwindow.ui \
-    popup.ui
+    mypopup.ui

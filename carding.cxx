@@ -9,6 +9,11 @@ using namespace std;
 void flashes::card_init ()
 {
     total=0;
+    nouns.clear();
+    nouns_glob.clear();
+    verbs.clear();
+    verbs_glob.clear();
+
     read_files(nouns,"nouns",total);
     read_files(verbs,"verbs",total);
     nouns_glob=nouns;
@@ -137,7 +142,7 @@ void flashes::exit_program()
     if (nouns_glob.size() != 0 ) write_files(nouns_glob, "nouns");
     if (verbs_glob.size() != 0 ) write_files(verbs_glob, "verbs");
     if (completed.size() != 0 ) write_files(completed, "memorized");
-    exit (EXIT_SUCCESS);
+    /* exit (EXIT_SUCCESS); */
 }
 
 void flashes::write_files(vector<word_obj> container, string file)

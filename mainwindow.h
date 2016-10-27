@@ -38,6 +38,9 @@ private slots:
 
     void on_continue_2_clicked();
 
+public slots:
+    void signal_recieved();
+
 private:
     Ui::MainWindow *ui;
 
