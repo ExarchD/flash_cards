@@ -110,9 +110,9 @@ int main ()
 
 void exit()
 {
-    write_files(nouns_glob, "nouns");
-    write_files(verbs_glob, "verbs");
-    write_files(completed, "memorized");
+    if (nouns_glob.size() != 0 ) write_files(nouns_glob, "nouns");
+    if (verbs_glob.size() != 0 ) write_files(verbs_glob, "verbs");
+    if (completed.size() != 0 ) write_files(completed, "memorized");
     exit (EXIT_SUCCESS);
 }
 
