@@ -14,6 +14,8 @@ class flashes
         void exit_program();
         void get_next_flash(std::string &question, std::vector<std::string> &vect_resp);
         int get_input();
+        int check_answers(int user_answer);
+        void process_response(int user_answer);
         void get_answers(std::vector<word_obj> container, std::vector<std::string> &responses);
         void iterate_number(std::vector<word_obj> &container, std::string, bool);
         void write_files(std::vector<word_obj> container, std::string);
@@ -29,6 +31,10 @@ class flashes
         std::vector<word_obj> verbs_glob;
         std::vector<word_obj> nouns;
         std::vector<word_obj> verbs;
+        std::vector<std::string> responses;
         std::vector<word_obj> completed;
+        int isType;
+        int index_val;
         int total;
+        word_obj answer;
 };

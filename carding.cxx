@@ -18,15 +18,13 @@ void flashes::card_init ()
 
 void flashes::get_next_flash(string& question, vector<string>& vect_resp)
 {
-    cout << nouns.size() << endl;
     if ( total > 0 )
     {
         int random_word_index=rand() % total;
 
-        word_obj answer;
         int count = 0;
-        int isType = 99;
-        int index_val=99;
+        isType = 99;
+        index_val=99;
         for (unsigned int x=0; x < verbs.size(); x++)
         {
             if (random_word_index >= count )
@@ -58,64 +56,81 @@ void flashes::get_next_flash(string& question, vector<string>& vect_resp)
         }
         cout << answer.word<< ": "<< endl;
 
-        vector<string> responses;
+        responses.clear();
         responses.push_back(answer.def);
         if ( isType == 1 ) get_answers(verbs_glob, responses);
         if ( isType == 2 ) get_answers(nouns_glob, responses);
-        question=answer.word;
-        vect_resp=responses;
 
         cout << endl;
         std::sort(responses.begin(), responses.end());
+        question=answer.word;
+        vect_resp=responses;
         for ( unsigned int y=0; y < responses.size(); y++)
         {
             cout << y+1 << ") " << responses[y] << endl;
         }
     }
-    else return;
+    else
+    {
+        responses.clear();
+        vect_resp=responses;
+        return;
+
+    }
 }
 
-        //need to sanitize input
-/* void flashes::bullshit() */
-/* { */
-/*         int user_answer=get_input(); */
+int flashes::check_answers(int user_answer)
+{
+        if ( responses[user_answer] == answer.def )
+        {
+            cout << "CORRECT" << endl;
+            return user_answer;
+        }
+        else
+        {
+            for (unsigned int y=0; y<responses.size(); y++)
+            {
+                if ( responses[y] == answer.def )
+                {
+                    return y;
+                }
+            }
+        }
+        return -9;
+}
 
-/*         if ( responses[user_answer-1] == answer.def ) */
-/*         { */
-/*             total=total-answer.number; */
-/*             cout << "CORRECT!" << endl; */
-/*             if ( isType == 2 ) */
-/*             { */
-/*                 nouns.erase(nouns.begin() + index_val); */
-/*                 iterate_number(nouns_glob,answer.word,true); */
-/*             } */
-/*             else */
-/*             { */
-/*                 verbs.erase(verbs.begin() + index_val); */
-/*                 iterate_number(verbs_glob,answer.word,true); */
-/*             } */
-/*         } */
-/*         else */
-/*         { */
-/*             total=total-answer.number; */
-/*             cout << "WRONG!" << endl; */
-/*             cout << "The answer is '" << answer.def << "'" <<  endl; */
-/*             if ( isType == 2 ) */
-/*             { */
-/*                 nouns.erase(nouns.begin() + index_val); */
-/*                 iterate_number(nouns_glob,answer.word,false); */
-/*             } */
-/*             else */
-/*             { */
-/*                 verbs.erase(verbs.begin() + index_val); */
-/*                 iterate_number(verbs_glob,answer.word,false); */
-/*             } */
-/*         } */
-/*         cout << endl; */
-
-/*     } */
-/*     exit_program(); */
-/* } */
+void flashes::process_response(int user_answer)
+{
+        if ( responses[user_answer] == answer.def )
+        {
+            total=total-answer.number;
+            if ( isType == 2 )
+            {
+                nouns.erase(nouns.begin() + index_val);
+                iterate_number(nouns_glob,answer.word,true);
+            }
+            else
+            {
+                verbs.erase(verbs.begin() + index_val);
+                iterate_number(verbs_glob,answer.word,true);
+            }
+        }
+        else
+        {
+            total=total-answer.number;
+            cout << "The answer is '" << answer.def << "'" <<  endl;
+            if ( isType == 2 )
+            {
+                nouns.erase(nouns.begin() + index_val);
+                iterate_number(nouns_glob,answer.word,false);
+            }
+            else
+            {
+                verbs.erase(verbs.begin() + index_val);
+                iterate_number(verbs_glob,answer.word,false);
+            }
+        }
+}
 
 void flashes::exit_program()
 {
