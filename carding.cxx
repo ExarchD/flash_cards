@@ -14,7 +14,7 @@ void flashes::card_init ()
     verbs.clear();
     verbs_glob.clear();
 
-    read_files(nouns,"nouns",total);
+    read_files(nouns,"proverbs",total);
     read_files(verbs,"verbs",total);
     nouns_glob=nouns;
     verbs_glob=verbs;
@@ -139,7 +139,7 @@ void flashes::process_response(int user_answer)
 
 void flashes::exit_program()
 {
-    if (nouns_glob.size() != 0 ) write_files(nouns_glob, "nouns");
+    if (nouns_glob.size() != 0 ) write_files(nouns_glob, "proverbs");
     if (verbs_glob.size() != 0 ) write_files(verbs_glob, "verbs");
     if (completed.size() != 0 ) write_files(completed, "memorized");
     /* exit (EXIT_SUCCESS); */
