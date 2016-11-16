@@ -3,21 +3,46 @@
 #include <iostream>
 #include <fstream>
 #include "carding.h"
+#include <dirent.h>
 using namespace std;
 
+vector<string> flashes::search_dir ()
+{
+    string extension="txt";
+    std::string curr_directory = "/home/dpluth/Source/flash_cards/cards/";
+    DIR* dir_point = opendir(curr_directory.c_str());
+    dirent* entry = readdir(dir_point);
+    vector<string> results;
+    while (entry){
+        if (entry->d_type == DT_REG){
+            std::string fname = entry->d_name;
+            if (fname.find(extension, (fname.length() - extension.length())) != std::string::npos)
+            {
+                if (fname != "memorized.txt" ) results.push_back(curr_directory+fname);
+            }
+        }
+        entry = readdir(dir_point);
+    }
+    return results;
+}
 
 void flashes::card_init ()
 {
     total=0;
-    nouns.clear();
-    nouns_glob.clear();
-    verbs.clear();
-    verbs_glob.clear();
+    biglist_glob.clear();
+    biglist.clear();
+    auto word_lists = search_dir();
 
-    read_files(nouns,"proverbs",total);
-    read_files(verbs,"verbs",total);
-    nouns_glob=nouns;
-    verbs_glob=verbs;
+    for (unsigned int list_index=0; list_index < word_lists.size(); list_index++)
+    {
+        list_obj NewWordList;
+        std::vector<word_obj> list;
+        read_files(list,word_lists[list_index],total);
+        NewWordList.list=list;
+        NewWordList.identifier=word_lists[list_index];
+        biglist.push_back(NewWordList);
+    }
+    biglist_glob=biglist;
     srand (time(NULL));
 }
 
@@ -30,50 +55,30 @@ void flashes::get_next_flash(string& question, vector<string>& vect_resp)
         int count = 0;
         isType = 99;
         index_val=99;
-        for (unsigned int x=0; x < verbs.size(); x++)
+        for (unsigned int x=0; x < biglist.size(); x++)
         {
-            if (random_word_index >= count )
-            {
-                if ( random_word_index < count+verbs[x].number )
-                {
-                    answer=verbs[x];
-                    index_val=x;
-                    isType=1;
-                }
-            }
-            count=count+verbs[x].number;
-        }
-        if ( random_word_index >= count )
-        {
-            for (unsigned int x=0; x < nouns.size(); x++)
+            for (unsigned int y=0; y < biglist[x].list.size(); y++)
             {
                 if (random_word_index >= count )
                 {
-                    if ( random_word_index < count+nouns[x].number )
+                    if ( random_word_index < count+biglist[x].list[y].number )
                     {
-                        answer=nouns[x];
-                        index_val=x;
-                        isType=2;
+                        answer=biglist[x].list[y];
+                        index_val=y;
+                        isType=x;
                     }
                 }
-                count=count+nouns[x].number;
+                count=count+biglist[x].list[y].number;
             }
         }
-        cout << answer.word<< ": "<< endl;
 
         responses.clear();
         responses.push_back(answer.def);
-        if ( isType == 1 ) get_answers(verbs_glob, responses);
-        if ( isType == 2 ) get_answers(nouns_glob, responses);
+        get_answers(biglist_glob[isType].list, responses);
 
-        cout << endl;
         std::sort(responses.begin(), responses.end());
         question=answer.word;
         vect_resp=responses;
-        for ( unsigned int y=0; y < responses.size(); y++)
-        {
-            cout << y+1 << ") " << responses[y] << endl;
-        }
     }
     else
     {
@@ -86,69 +91,53 @@ void flashes::get_next_flash(string& question, vector<string>& vect_resp)
 
 int flashes::check_answers(int user_answer)
 {
-        if ( responses[user_answer] == answer.def )
+    if ( responses[user_answer] == answer.def )
+    {
+        return user_answer;
+    }
+    else
+    {
+        for (unsigned int y=0; y<responses.size(); y++)
         {
-            cout << "CORRECT" << endl;
-            return user_answer;
-        }
-        else
-        {
-            for (unsigned int y=0; y<responses.size(); y++)
+            if ( responses[y] == answer.def )
             {
-                if ( responses[y] == answer.def )
-                {
-                    return y;
-                }
+                return y;
             }
         }
-        return -9;
+    }
+    return -9;
 }
 
 void flashes::process_response(int user_answer)
 {
-        if ( responses[user_answer] == answer.def )
-        {
-            total=total-answer.number;
-            if ( isType == 2 )
-            {
-                nouns.erase(nouns.begin() + index_val);
-                iterate_number(nouns_glob,answer.word,true);
-            }
-            else
-            {
-                verbs.erase(verbs.begin() + index_val);
-                iterate_number(verbs_glob,answer.word,true);
-            }
-        }
-        else
-        {
-            total=total-answer.number;
-            cout << "The answer is '" << answer.def << "'" <<  endl;
-            if ( isType == 2 )
-            {
-                nouns.erase(nouns.begin() + index_val);
-                iterate_number(nouns_glob,answer.word,false);
-            }
-            else
-            {
-                verbs.erase(verbs.begin() + index_val);
-                iterate_number(verbs_glob,answer.word,false);
-            }
-        }
+    total=total-answer.number;
+    if (user_answer == 999) return;
+    if ( responses[user_answer] == answer.def )
+    {
+        biglist[isType].list.erase(biglist[isType].list.begin() + index_val);
+        iterate_number(biglist_glob[isType].list,answer.word,true);
+    }
+    else
+    {
+        cout << "The answer is '" << answer.def << "'" <<  endl;
+        biglist[isType].list.erase(biglist[isType].list.begin() + index_val);
+        iterate_number(biglist_glob[isType].list,answer.word,false);
+    }
 }
 
 void flashes::exit_program()
 {
-    if (nouns_glob.size() != 0 ) write_files(nouns_glob, "proverbs");
-    if (verbs_glob.size() != 0 ) write_files(verbs_glob, "verbs");
+    for (unsigned int x=0; x < biglist.size(); x++)
+    {
+        if (biglist_glob[x].list.size() !=0) write_files(biglist_glob[x].list, biglist_glob[x].identifier); //fix this...biglist needs to carry the type of data it is
+    }
     if (completed.size() != 0 ) write_files(completed, "memorized");
-    /* exit (EXIT_SUCCESS); */
 }
 
 void flashes::write_files(vector<word_obj> container, string file)
 {
     ofstream myfile;
-    myfile.open (file+".txt");
+    myfile.open (file);
     for (unsigned int x=0; x< container.size(); x++)
     {
         myfile << container[x].word << " -- " << container[x].def << " -- " << container[x].number << "\n";
@@ -158,7 +147,7 @@ void flashes::write_files(vector<word_obj> container, string file)
 
 void flashes::read_files(vector<word_obj>& container, string filename, int& total)
 {
-    ifstream file (filename+".txt");
+    ifstream file (filename);
     string line;
     /* check if file exists */
     if (file.is_open())
@@ -183,8 +172,8 @@ void flashes::read_files(vector<word_obj>& container, string filename, int& tota
                 completed.push_back(newword);
             }
         }
-        file.close();
     }
+        file.close();
 }
 
 void flashes::iterate_number(vector<word_obj>& container, std::string correct_word, bool down)
@@ -192,7 +181,6 @@ void flashes::iterate_number(vector<word_obj>& container, std::string correct_wo
     vector<word_obj>::iterator it;
     it = std::find_if(container.begin(), container.end(), find_word(correct_word));
     auto pos = std::distance(container.begin(), it);
-    cout << container[pos].word << endl;
     if (down) container[pos].number=container[pos].number-1;
     else container[pos].number=container[pos].number+1;
 }

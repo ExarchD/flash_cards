@@ -11,6 +11,7 @@ class flashes
             int number;
         };
         void card_init();
+        std::vector<std::string> search_dir();
         void exit_program();
         void get_next_flash(std::string &question, std::vector<std::string> &vect_resp);
         int get_input();
@@ -27,10 +28,13 @@ class flashes
                 return m.word == word;
             }
         };
-        std::vector<word_obj> nouns_glob;
-        std::vector<word_obj> verbs_glob;
-        std::vector<word_obj> nouns;
-        std::vector<word_obj> verbs;
+        struct list_obj
+        {
+            std::vector<word_obj> list;
+            std::string identifier;
+        };
+        std::vector<list_obj> biglist;
+        std::vector<list_obj> biglist_glob;
         std::vector<std::string> responses;
         std::vector<word_obj> completed;
         int isType;

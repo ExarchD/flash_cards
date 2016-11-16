@@ -15,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::Set_values(std::string question, std::vector<std::string> responses)
 {
+    responded=false;
     ui->word_label->setText(QString::fromStdString(question));
     ui->answer1->setText(QString::fromStdString(responses[0]));
     ui->answer2->setText(QString::fromStdString(responses[1]));
@@ -77,7 +78,9 @@ void MainWindow::run_check(int val)
 
 void MainWindow::on_skip_clicked()
 {
+    ThisCard.process_response(999);
     ThisCard.get_next_flash(question, responses);
+    Set_values(question,responses);
 }
 
 
@@ -96,7 +99,6 @@ void MainWindow::on_continue_2_clicked()
 {
     ThisCard.process_response(official_answer);
     ThisCard.get_next_flash(question, responses);
-    std::cout << responses.size() << std::endl;
     if ( responses.size() < 2 )
     {
         ThisCard.exit_program();
@@ -119,7 +121,6 @@ void MainWindow::on_continue_2_clicked()
 
 void MainWindow::signal_recieved()
 {
-    std::cout << "signal_recieved" << std::endl;
     ThisCard.card_init();
     ThisCard.get_next_flash(question, responses);
     Set_values(question,responses);
