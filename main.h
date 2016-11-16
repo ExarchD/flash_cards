@@ -1,3 +1,6 @@
+#ifndef MAIN_CPP
+#define MAIN_CPP
+
 #include <string>
 #include <vector>
 
@@ -42,3 +45,4 @@ class flashes
         int total;
         word_obj answer;
 };
+#endif

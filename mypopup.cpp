@@ -1,5 +1,5 @@
 #include "mypopup.h"
-#include "carding.h"
+#include "main.h"
 #include "ui_mypopup.h"
 #include <iostream>
 

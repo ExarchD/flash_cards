@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <string>
 #include <vector>
-#include "carding.h"
+#include "main.h"
 
 namespace Ui {
 class MainWindow;
