@@ -12,18 +12,19 @@ TARGET = flash_cards
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-        mainwindow.cpp\
-        flash_alg.cxx\
-        opto.cxx\
-    mypopup.cpp
+SOURCES += src/main.cpp\
+        src/mainwindow.cpp\
+        src/flash_alg.cxx\
+        src/opto.cxx\
+    src/mypopup.cpp
 
-HEADERS  += mainwindow.h\
-            flash_alg.h\
-            opto.h\
-    mypopup.h
+INCLUDEPATH += $$PWD/include
+HEADERS  += include/mainwindow.h\
+            include/flash_alg.h\
+            include/opto.h\
+    include/mypopup.h
 
-FORMS    += mainwindow.ui \
-    mypopup.ui
+FORMS    += form/mainwindow.ui \
+    form/mypopup.ui
 
 LIBS += -L/usr/lib -lconfig++ 
