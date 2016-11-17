@@ -1,5 +1,5 @@
 #include "mypopup.h"
-#include "main.h"
+#include "flash_alg.h"
 #include "ui_mypopup.h"
 #include <iostream>
 

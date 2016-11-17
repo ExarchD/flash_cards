@@ -4,7 +4,8 @@
 #include <QMainWindow>
 #include <string>
 #include <vector>
-#include "main.h"
+#include "flash_alg.h"
+#include "opto.h"
 
 namespace Ui {
 class MainWindow;
@@ -20,6 +21,7 @@ public:
     std::string question;
     std::vector<std::string> responses;
     flashes ThisCard;
+    options TheseOptions;
     bool responded;
     int official_answer;
 

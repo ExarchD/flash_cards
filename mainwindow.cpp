@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    TheseOptions.read_opts();
     ui->setupUi(this);
     ThisCard.card_init();
     ThisCard.get_next_flash(question, responses);

@@ -14,11 +14,16 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp\
+        flash_alg.cxx\
+        opto.cxx\
     mypopup.cpp
 
 HEADERS  += mainwindow.h\
-            main.h \
+            flash_alg.h\
+            opto.h\
     mypopup.h
 
 FORMS    += mainwindow.ui \
     mypopup.ui
+
+LIBS += -L/usr/lib -lconfig++ 
