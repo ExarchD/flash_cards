@@ -7,9 +7,15 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    TheseOptions.read_opts();
+    if (!TheseOptions.check_file())
+    {
+        /* open popup asking to configure list dir */
+        /* and other options? */
+    }
+    TheseOptions.read_opts ();
+
     ui->setupUi(this);
-    ThisCard.card_init();
+    ThisCard.card_init(TheseOptions.enabled_lists);
     ThisCard.get_next_flash(question, responses);
     Set_values(question,responses);
 }
@@ -122,7 +128,7 @@ void MainWindow::on_continue_2_clicked()
 
 void MainWindow::signal_recieved()
 {
-    ThisCard.card_init();
+    ThisCard.card_init(TheseOptions.enabled_lists);
     ThisCard.get_next_flash(question, responses);
     Set_values(question,responses);
 }
