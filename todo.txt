@@ -1,5 +1,4 @@
 Make card list flexible. 
-    Load all card_*.txt files in dir
     Make settings file where you can turn off and on certain files
     Make options for setting number of words to practice
     Make options for other types of testing
