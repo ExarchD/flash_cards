@@ -7,12 +7,12 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    if (!TheseOptions.check_file())
+    if (!TheseOptions.check_config())
     {
         /* open popup asking to configure list dir */
         /* and other options? */
     }
-    TheseOptions.read_opts ();
+    TheseOptions.retrieve_enabled_lists ();
 
     ui->setupUi(this);
     ThisCard.card_init(TheseOptions.enabled_lists);

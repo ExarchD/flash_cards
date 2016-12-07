@@ -1,9 +1,11 @@
 #include <iostream>
+#include <algorithm>
+#include <assert.h>
 #include <dirent.h>
 #include "opto.h"
 using namespace std;
 
-bool options::check_file ()
+bool options::check_config ()
 {
     config_file="example.cfg";
     try
@@ -38,46 +40,48 @@ void options::write_opts ()
     cout << "write options" << endl;
 }
 
+void options::retrieve_enabled_lists ()
+{
+    read_opts();
+    search_dir();
+    sort(user_lists.begin(), user_lists.end());
+    sort(all_lists.begin(), all_lists.end());
+    set_intersection(user_lists.begin(),user_lists.end(),all_lists.begin(),all_lists.end(),back_inserter(enabled_lists));
+
+    assert(enabled_lists.size() > 0); 
+}
+
 void options::read_opts ()
 {
-    cout << "read options" << endl;
     card_directory="/home/dpluth/Source/flash_cards/cards/";
-
-    search_dir(card_directory);
-    enabled_lists=all_lists;
+    user_lists.push_back(card_directory+"verbs.txt");
 }
 
-void options::get_lists()
-{
-
-    cout << "get lists" << endl;
-
-}
-
-void options::write_file ()
+void options::save_config ()
 {
     cfg.writeFile(config_file.c_str());
 }
 
-void options::search_dir (string word_dir)
+bool options::search_dir ()
 {
     string extension="txt";
-    std::string curr_directory = word_dir;
-    DIR* dir_point = opendir(curr_directory.c_str());
+    DIR  *dir_point;
+    if ( (dir_point = opendir(card_directory.c_str())) == NULL)
+    {
+        return false;
+    }
     dirent* entry = readdir(dir_point);
     vector<string> results;
-    vector<string> rawresults;
     while (entry){
         if (entry->d_type == DT_REG){
             std::string fname = entry->d_name;
             if (fname.find(extension, (fname.length() - extension.length())) != std::string::npos)
             {
-                rawresults.push_back(curr_directory+fname);
-                if (fname != "memorized.txt" ) results.push_back(curr_directory+fname);
+                results.push_back(card_directory+fname);
             }
         }
         entry = readdir(dir_point);
     }
     all_lists=results;
-    raw_lists=rawresults;
+    return true;
 }
